@@ -1,0 +1,12 @@
+---
+title: "Week 1 Discussion"
+subtitle: "Data Wrangling"
+author: "Michelle Yiv"
+date: 2025-01-07
+toc: true
+---
+
+```{r}
+
+```
+
