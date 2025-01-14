@@ -1,0 +1,75 @@
+---
+title: "Week 1 Discussion"
+subtitle: "Data Wrangling"
+author: "Michelle Yiv"
+date: 2025-01-07
+toc: true
+---
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                    setup                                 ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#..........................load packages.........................
+library(tidyverse)
+
+#..........................import data...........................
+drought <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2021/2021-07-20/drought.csv')
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                            wrangle drought data                          ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+drought_clean <- drought |>
+
+  # select cols of interest & update names for clarity (as needed) ----
+  select(date = valid_start, state_abb, drought_lvl, area_pct) |> 
+
+  # add year, month & day cols using {lubridate} fxns ----
+  # NOTE: this step isn't necessary for our plot, but I'm including as examples of how to extract different date elements from a object of class `Date` using {lubridate} ----
+  mutate(year = year(date),
+         month = month(date, label = TRUE, abbr = TRUE),
+         day = day(date)) |>
+
+  # add drought level conditions names ----
+  mutate(drought_lvl_long = factor(drought_lvl,
+                            levels = c("D4", "D3", "D2", "D1","D0", "None"),
+                            labels = c("(D4) Exceptional", "(D3) Extreme",
+                                       "(D2) Severe", "(D1) Moderate", 
+                                       "(D0) Abnormally Dry", 
+                                       "No Drought"))) |>
+  
+  # reorder cols ----
+  relocate(date, year, month, day, state_abb, drought_lvl, drought_lvl_long, area_pct)
+```
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##       create stacked area plot of CA drought conditions through time     ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+drought_clean |> 
+  
+  # remove drought_lvl "None" & filter for just CA ----
+  filter(drought_lvl != "None",
+         state_abb == "CA") |> 
+  
+  # pipe into ggplot here!
+  ggplot(aes(x = date, y = area_pct, fill = drought_lvl_long )) + 
+  geom_area(position = position_stack(reverse = TRUE)) +
+  scale_fill_manual(values = rev(c('#FFFF04','#FFDA67','#FEC100', '#FF0000', '#853A04'))) +
+  scale_x_date(breaks = scales::breaks_pretty(n = 10),
+               expand = c(0,0)) +
+  scale_y_continuous(label = scales::label_percent(scale = 1),
+                     expand = c(0,0),
+                     breaks = scales::breaks_pretty(n=10)) +
+  theme_bw() +
+  labs(title = 'Drought Area in California',
+       fill = '',
+       x = '',
+       y = '') +
+  theme(plot.title = element_text(hjust = 0.5),
+        legend.position="bottom", legend.direction="horizontal")
+```
+
