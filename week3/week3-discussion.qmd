@@ -1,0 +1,40 @@
+---
+title: "Week 3 Discussion"
+subtitle: "Writing Alt text"
+author: "Michelle Yiv"
+date: 2025-01-07
+toc: true
+---
+
+## Load libraries
+
+```{r}
+library(ggplot2)
+library(palmerpenguins)
+```
+
+## Example 1 
+
+```{r warning = FALSE, message = FALSE}
+#| echo: false
+#| 
+#| fig-cap: "Histogram of penguin body mass"
+#| fig-alt: "A stacked histogram of average body mass in grams where Gentoo penguins are larger than Adelie or Chinstrap penguins by X percent/grams."
+
+ggplot(data = penguins, aes(x = body_mass_g, fill = species)) +
+  geom_histogram(alpha = 0.5, 
+                 position = "identity") +
+  scale_fill_manual(values = c("darkorange","purple","cyan4")) +
+  labs(x = "Body mass (g)",
+       y = "Frequency",
+       title = "Penguin body masses")
+```
+
+## Example 2 (from The New York Times):
+
+![](nyt-monthly-temp.png){fig-alt="Dot plot of Monthly Global temperatures in degrees celsius from 1850 to 2023 compared to the 20th century average. Dots increase from green to red to indicate increasing global temerature. From 1975 onward the yearly temperature is hotter than average, whereas prior to 1975 it is cooler than average. Each year has 12 dots representing each month. 2015 to 2023 has experienced record hot months."}
+
+## Example 3 (Fig 1A from Chapman et al. 2024):
+
+<img src="chapman-etal-2024.png" alt="Heat map of Global species observations. Countries with high income such as North America or European countries have disproportionately high number of observations." width="700px">
+

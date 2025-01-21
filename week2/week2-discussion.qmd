@@ -1,5 +1,5 @@
 ---
-title: "Week 1 Discussion"
+title: "Week 2 Discussion"
 subtitle: "Data Wrangling"
 author: "Michelle Yiv"
 date: 2025-01-07
@@ -71,5 +71,5 @@ drought_clean |>
        y = '') +
   theme(plot.title = element_text(hjust = 0.5),
         legend.position="bottom", legend.direction="horizontal")
-```
+g```
 
