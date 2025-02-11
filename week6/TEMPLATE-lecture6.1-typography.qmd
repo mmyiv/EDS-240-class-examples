@@ -81,6 +81,7 @@ font_add(family = "fa-solid",
 
 #......enable {showtext} rendering for all newly opened GDs......
 showtext_auto()
+showtext_opts(dpi=300)
 
 #..........................import data...........................
 # find import code at: https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-03-05#grab-the-clean-data-here
@@ -253,22 +254,28 @@ plot <- ggplot(subset_jobs) +
   labs(title = "Males earn more than females across occupations",
        subtitle = subtitle,
        captions = caption) +
-  theme_minimal() +
+  theme_minimal(base_size = 7) + # Adjust this when editing saving image size as everything is relative
   theme(
     plot.title.position = "plot",
     plot.title = element_text(family = "josefin",
                               face = "bold",
-                              size = 18,
+                              size = rel(1.7),
                               color = earnings_pal["dark_text"]),
     plot.subtitle = element_textbox(family = "sen",
-                                 size = 11.5,
+                                 size = rel(1.1),
                                  color = earnings_pal["light_text"],
-                                 margin = margin(t = 2, r = 0, b = 6, l = 0)),
+                                # fill = "lightblue", # for debugging
+                                 width = unit(25, "cm"),
+                                 margin = margin(t = 2, r = 0, b = 6, l = 0),
+                                 padding = margin(t = 5, r = 0, b = 5, l = 0)),
     plot.caption = ggtext::element_textbox(family = "sen",
                                 face = "italic",
                                 color = earnings_pal["light_text"],
+                              #  fill = "lightblue", # for debugging
+                                width = unit(25, "cm"),
                                 margin = margin(t = 15, r = 0, b = 0, l = 0),
-                                halign = 1),
+                                halign = 1,
+                                padding = margin(t = 5, r = 0, b = 5, l = 0)),
     strip.text = element_text(family = "josefin",
                               face = "bold",
                               size = 10,
@@ -292,8 +299,8 @@ ggsave(
   filename = here::here("week6", "images", "salary-plot.png"),
   plot = plot, 
   device = "png",
-  width = 8, 
-  height = 7,
+  width = 5, 
+  height = 5,
   unit = "in"
 )
 ```
